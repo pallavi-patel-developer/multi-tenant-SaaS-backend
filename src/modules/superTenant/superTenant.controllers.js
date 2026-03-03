@@ -24,6 +24,15 @@ export const getTenants = async (req, res, next) => {
   }
 }
 
+export const getTenantById = async (req, res, next) => {
+  try {
+    const tenant = await SuperTenantService.getTenantById(req.params.id);
+    res.status(200).json({ success: true, data: tenant });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const updateTenant = async (req, res, next) => {
   try {
     const updateTenant = await SuperTenantService.updateTenant(req.params.id, req.body);

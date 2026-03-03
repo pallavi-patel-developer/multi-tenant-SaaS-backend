@@ -95,7 +95,7 @@ const SuperTenantSchema = new Schema({
     billingCycle: {
       type: String, enum: ['monthly', 'yearly'], default: 'monthly'
     },
-    paymentStatus: { type: String, enum: ['paid', 'unpaid'], default: 'unpaid' },
+    paymentStatus: { type: String, enum: ['Paid', 'Pending'], default: 'Pending' },
     expiryDate: { type: Date, required: true },
 
     trialEndDate: { type: Date, default: null },

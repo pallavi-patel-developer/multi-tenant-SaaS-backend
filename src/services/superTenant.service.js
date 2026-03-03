@@ -35,6 +35,26 @@ const createTenant = async (payload) => {
     throw new Error("Subdomain already exists");
   }
 
+  const emailExist = await SuperTenant.findOne({ 'owner.email': payload.owner.email });
+  if (emailExist) {
+    throw new Error("Email already exists");
+  }
+
+  const phoneExist = await SuperTenant.findOne({ 'owner.phone': payload.owner.phone })
+  if(phoneExist){
+    throw new Error("Phone already exists");
+  }
+
+  const gstExist = await SuperTenant.findOne({ 'business.gstNumber': payload.business.gstNumber })
+  if(gstExist){
+    throw new Error("GST already exists");
+  }
+
+  const panExist = await SuperTenant.findOne({ 'pan': payload.pan })
+  if(panExist){
+    throw new Error("PAN already exists");
+  }
+
   payload.tenantId = ("TENANTID-" + nanoid(12));
 
   if (!subscription?.expiryDate) {
@@ -49,20 +69,32 @@ const createTenant = async (payload) => {
 };
 
 const getTenants = async () => {
-  return await SuperTenant.find().lean();
+  const tenants = await SuperTenant.find().lean().sort({ createdAt: -1 });
+  return tenants;
+}
+
+const getTenantById = async (id) => {
+  const tenant = await SuperTenant.findById(id).lean();
+  if (!tenant) {
+    const error = new Error("Tenant not found");
+    error.statusCode = 404;
+    throw error;
+  }
+  return tenant;
 }
 
 const updateTenant = async (id, payload) => {
-  return await SuperTenant.findByIdAndUpdate(id, payload, { new: true });
+  return await SuperTenant.findByIdAndUpdate(id, payload, { returnDocument: 'after' });
 }
 
-const deleteTenant = async(id)=>{
+const deleteTenant = async (id) => {
   return await SuperTenant.findByIdAndDelete(id);
 }
 
 export default {
   createTenant,
   getTenants,
+  getTenantById,
   updateTenant,
   deleteTenant
 };
