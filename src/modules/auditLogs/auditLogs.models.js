@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const AuditLogSchema = new mongoose.Schema({
   user: {
@@ -32,4 +32,4 @@ const AuditLogSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('AuditLog', AuditLogSchema);
+export default mongoose.model('AuditLog', AuditLogSchema);

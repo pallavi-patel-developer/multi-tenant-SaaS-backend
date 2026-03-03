@@ -1,9 +1,11 @@
-const express = require('express');
+import express from 'express';
+import * as superTenantControllers from './superTenant.controllers.js';
+
 const router = express.Router();
-const superTenantControllers = require('./superTenant.controllers');
 
 router.get('/', superTenantControllers.getTenants);
 router.post('/', superTenantControllers.createTenant);
-router.patch('/:id/status', superTenantControllers.updateTenantStatus);
+router.patch('/:id', superTenantControllers.updateTenant);
+router.delete('/:id', superTenantControllers.deleteTenant);
 
-module.exports = router;
+export default router;

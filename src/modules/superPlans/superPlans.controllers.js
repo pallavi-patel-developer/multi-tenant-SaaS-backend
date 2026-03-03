@@ -1,6 +1,6 @@
-const SuperPlan = require('./superPlans.models');
+import SuperPlan from './superPlans.models.js';
 
-exports.createPlan = async (req, res) => {
+export const createPlan = async (req, res) => {
   try {
     const { planName, planPrice, planCode, billingCycle, trialDays, status } = req.body;
     const plan = await SuperPlan.create({
@@ -18,7 +18,7 @@ exports.createPlan = async (req, res) => {
   }
 }
 
-exports.showPlan = async (req, res) => {
+export const showPlan = async (req, res) => {
   try {
     const plan = await SuperPlan.find().lean()
     res.status(200).json({ success: true, message: 'Plan fetched successfully', plan })
@@ -27,7 +27,7 @@ exports.showPlan = async (req, res) => {
   }
 }
 
-exports.deletePlan = async (req, res) => {
+export const deletePlan = async (req, res) => {
   try {
     const { id } = req.params;
     const plan = await SuperPlan.findByIdAndDelete(id);
@@ -37,7 +37,7 @@ exports.deletePlan = async (req, res) => {
   }
 }
 
-exports.updatePlan = async (req, res) => {
+export const updatePlan = async (req, res) => {
   try {
     const { id } = req.params;
     const plan = await SuperPlan.findByIdAndUpdate(id, req.body, { new: true });

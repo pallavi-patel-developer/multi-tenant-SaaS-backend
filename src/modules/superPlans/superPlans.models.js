@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const SuperPlanSchema = new mongoose.Schema({
   planName: { type: String, required: true },
@@ -6,8 +6,8 @@ const SuperPlanSchema = new mongoose.Schema({
   planCode: { type: String, required: true },
   features: [String],
   billingCycle: { type: String, enum: ['monthly', 'yearly'], default: 'monthly' },
-  trialDays: { type:Number ,default:0},
-  status: {type: String, enum :['active', 'inactive'],default:'active'}
+  trialDays: { type: Number, default: 0 },
+  status: { type: String, enum: ['active', 'inactive'], default: 'active' }
 }, { timestamps: true });
 
-module.exports = mongoose.model('SuperPlan', SuperPlanSchema);
+export default mongoose.model('SuperPlan', SuperPlanSchema);

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const auditLogsControllers = require('./auditLogs.controllers');
+import * as auditLogsControllers from './auditLogs.controllers.js';
 
 router.get('/', auditLogsControllers.getAuditLogs);
 
-module.exports = router;
+export default router;

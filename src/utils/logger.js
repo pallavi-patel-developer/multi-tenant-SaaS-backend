@@ -1,4 +1,4 @@
-const AuditLog = require('../modules/auditLogs/auditLogs.models');
+import AuditLog from '../modules/auditLogs/auditLogs.models.js';
 
 /**
  * Persists a critical action to the Audit Log.
@@ -25,4 +25,4 @@ const logAuditAction = async (userId, action, resourceId, changes, reason = 'N/A
   }
 };
 
-module.exports = { logAuditAction };
+export { logAuditAction };

@@ -1,6 +1,6 @@
-const AuditLog = require('./auditLogs.models');
+import AuditLog from './auditLogs.models.js';
 
-exports.getAuditLogs = async (req, res) => {
+export const getAuditLogs = async (req, res) => {
   try {
     const logs = await AuditLog.find().sort({ timestamp: -1 });
     res.status(200).json(logs);
