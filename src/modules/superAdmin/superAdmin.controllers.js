@@ -19,6 +19,7 @@ const login = async(req,res)=>{
         expiresIn:'7d'  //expiry time
       }
     );
+    console.log("===================== SUPERADMIN TOKEN ========================== ",token)
     res.status(200).json({message:"Login successfull",token,admin:{id:admin._id,name:admin.name,email:admin.email,role:admin.role}});
      
     

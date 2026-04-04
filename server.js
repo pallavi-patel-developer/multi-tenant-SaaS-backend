@@ -20,11 +20,13 @@ import superTenantRoutes from './src/modules/superTenant/superTenant.routes.js';
 import superPlansRoutes from './src/modules/superPlans/superPlans.routes.js';
 import auditLogsRoutes from './src/modules/auditLogs/auditLogs.routes.js';
 import superAdminRoutes from './src/modules/superAdmin/superAdmin.routes.js';
+import superPaymentsRoutes from './src/modules/superPayments/superPayments.routes.js';
 
 app.use('/api/v1/tenants', superTenantRoutes);
 app.use('/api/v1/plans', superPlansRoutes);
 app.use('/api/v1/audit-logs', auditLogsRoutes);
 app.use('/api/v1/admin', superAdminRoutes);
+app.use('/api/v1/payments', superPaymentsRoutes);
 
 import errorHandler from './src/middlewares/error.middleware.js';
 app.use(errorHandler);

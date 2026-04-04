@@ -2,14 +2,10 @@ import jwt from "jsonwebtoken";
 
 const authenticate = (req,res,next)=>{
   try{
-    const token= req.headers.authorization?.split('')[1];
-    const decoded = jwt.verify(token,process.env.JWT_SECRET);
-  /**
-     jwt.verify() do kaam karta hai ek saath:
-     Token valid hai ya nahi check karta hai
-     Agar valid hai toh payload wapas deta hai (jo tune jwt.sign() mein daala tha)
-  */
-    req.user = decoded;   //agle middleware/controller ko user info pass krne ke liye
+    const token = req.headers.authorization?.split(' ')[1]; // space se split -> convert into array -> ["Bearer", "token"]
+    if(!token) return res.status(401).json({message:"Internal Server Error"});
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
   }
   catch(e){

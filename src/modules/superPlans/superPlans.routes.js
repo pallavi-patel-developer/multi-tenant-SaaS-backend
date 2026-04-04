@@ -5,6 +5,6 @@ import { updatePlan, createPlan, deletePlan, showPlan } from './superPlans.contr
 router.post('/create', createPlan);
 router.delete('/:id', deletePlan);
 router.get('/show', showPlan)
-router.patch('/update', updatePlan);
+router.patch('/:id', updatePlan);
 
 export default router;

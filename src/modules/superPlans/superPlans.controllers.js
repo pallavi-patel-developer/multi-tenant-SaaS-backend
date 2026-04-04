@@ -20,7 +20,7 @@ export const createPlan = async (req, res) => {
 
 export const showPlan = async (req, res) => {
   try {
-    const plan = await SuperPlan.find().lean()
+    const plan = await SuperPlan.find().lean().sort({createdAt:-1});
     res.status(200).json({ success: true, message: 'Plan fetched successfully', plan })
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to fetch plan', error: error.message })
@@ -31,7 +31,7 @@ export const deletePlan = async (req, res) => {
   try {
     const { id } = req.params;
     const plan = await SuperPlan.findByIdAndDelete(id);
-    res.status(200).json({ success: true, message: 'Plan Delted Sucessfully' });
+    res.status(200).json({ success: true, message: 'Plan Deleted Sucessfully' });
   } catch {
     res.status(500).json({ success: false, message: "Plan didnt delete" })
   }
