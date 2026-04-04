@@ -8,7 +8,7 @@ export const createRoles = async (req, res) => {
       roleEmail,
       rolePassword,
       description,
-    permissions
+      permissions
     });
     return res.status(201).json({ success: true, message: "Role Created Sucessfulyy" });
   }

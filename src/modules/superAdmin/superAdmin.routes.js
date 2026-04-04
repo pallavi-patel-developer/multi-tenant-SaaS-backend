@@ -5,7 +5,6 @@ const router = express.Router();
 
 // ✅ PUBLIC route — koi middleware nahi (login ke liye token kahan se aayega?)
 router.post("/login", login);
-
 // ✅ PROTECTED routes — pehle token check, phir role check, tab controller
 // router.get("/profile",   authenticate, authorizeSuperAdmin, login);
 // router.get("/dashboard", authenticate, authorizeSuperAdmin, getDashboard);
