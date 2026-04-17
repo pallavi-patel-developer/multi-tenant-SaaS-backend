@@ -1,28 +1,42 @@
 import AuditLog from '../modules/auditLogs/auditLogs.models.js';
 
-/**
- * Persists a critical action to the Audit Log.
- * 
- * @param {string} userId - ID of the user performing the action
- * @param {string} action - Action type (e.g., 'TENANT_CREATED')
- * @param {string} resourceId - ID of the affected resource
- * @param {object} changes - Description of what changed
- * @param {string} [reason] - Reason for the action
- */
-const logAuditAction = async (userId, action, resourceId, changes, reason = 'N/A') => {
+export const logAuditAction = async (req, actionTitle, resourceId, details) => {
   try {
-    const log = new AuditLog({
-      user: userId || 'System',
-      action,
-      resourceId,
-      changes,
-      reason
-    });
-    await log.save();
-    console.log(`[AuditLog] ${action} recorded for ${resourceId}`);
-  } catch (error) {
-    console.error(`[AuditLog-Error] Failed to record log:`, error.message);
-  }
-};
 
-export { logAuditAction };
+    let user = req.user;
+
+    if (!user && req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+      try {
+        const token = req.headers.authorization.split(' ')[1];
+        const jwt = await import('jsonwebtoken');
+        const decoded = jwt.default.verify(token, process.env.JWT_SECRET);
+
+        if (decoded.role === 'superAdmin') {
+          const SuperAdminModel = await import('../modules/superAdmin/superAdmin.models.js');
+          user = await SuperAdminModel.default.findById(decoded.id).lean();
+        } else {
+          const SuperRoleModel = await import('../modules/superRole/superRole.models.js');
+          user = await SuperRoleModel.default.findById(decoded.id).lean();
+        }
+      } catch (err) {
+        console.log("Logger Token Parse Error ignored");
+      }
+    }
+
+    const adminName = user?.name || user?.roleName || user?.email || user?.roleEmail || 'Unknown';
+
+    const adminRole = req.user?.role || (req.user?.roleName ? 'Role: ' + req.user.roleName : 'Super Admin');
+    const ipAddress = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || req.connection?.remoteAddress || req.ip;
+    await AuditLog.create({
+      adminName,
+      adminRole,
+      ipAddress: ipAddress,
+      resourceId: resourceId ? resourceId.toString() : 'N/A',
+      action: actionTitle,
+      changes: details
+    })
+  }
+  catch (error) {
+    console.error("Error logging audit action:", error);
+  }
+}
