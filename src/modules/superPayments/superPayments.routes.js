@@ -5,7 +5,7 @@ import { authenticate, authorizeSuperAdmin } from '../../middlewares/auth.superA
 const router = Router();
 
 // Saare routes protected hain — req.user middleware se set hoga
-router.use(authenticate, authorizeSuperAdmin);
+router.use(authenticate);
 
 router.post('/', createSuperPayment);
 router.get('/', getSuperPayment);
