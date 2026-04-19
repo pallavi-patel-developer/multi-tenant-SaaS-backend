@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import validate from 'validator';
 import { Schema } from 'mongoose';
+// feature_flags are copied from SuperCategory at tenant creation time
 const SuperTenantSchema = new Schema({
   tenantId:
   {
@@ -91,6 +92,12 @@ const SuperTenantSchema = new Schema({
   currency: { type: String, required: true, enum: ['USD', 'INR'] },
   mongoUri: { type: String, default: null }, // Optional custom DB URI
   subdomain: { type: String, required: true, unique: true, trim: true },
+  // Feature flags are automatically copied from SuperCategory when tenant is created
+  // e.g. if business.type = 'hotel' → feature_flags gets hotel's features from DB
+  feature_flags: {
+    type: [String],
+    default: [],
+  },
   subscription: {
     billingCycle: {
       type: String, enum: ['monthly', 'yearly'], default: 'monthly'

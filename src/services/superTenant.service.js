@@ -25,6 +25,7 @@
 // services/superTenant.service.js
 
 import SuperTenant from '../modules/superTenant/superTenant.models.js';
+import SuperCategory from '../modules/superCategories/superCategories.models.js';
 import { nanoid } from "nanoid";
 
 const createTenant = async (payload) => {
@@ -41,17 +42,17 @@ const createTenant = async (payload) => {
   }
 
   const phoneExist = await SuperTenant.findOne({ 'owner.phone': payload.owner.phone })
-  if(phoneExist){
+  if (phoneExist) {
     throw new Error("Phone already exists");
   }
 
   const gstExist = await SuperTenant.findOne({ 'business.gstNumber': payload.business.gstNumber })
-  if(gstExist){
+  if (gstExist) {
     throw new Error("GST already exists");
   }
 
   const panExist = await SuperTenant.findOne({ 'pan': payload.pan })
-  if(panExist){
+  if (panExist) {
     throw new Error("PAN already exists");
   }
 
@@ -61,6 +62,19 @@ const createTenant = async (payload) => {
     const expiry = new Date();
     expiry.setMonth(expiry.getMonth() + 1);
     payload.subscription.expiryDate = expiry;
+  }
+
+  // Business type ke basis pe SuperCategory se feature_flags copy karo
+  // e.g. business.type = 'hotel' → hotel ki features automatically milegi
+  const businessType = payload.business?.type?.toLowerCase();
+  if (businessType) {
+    const category = await SuperCategory.findOne({ type: businessType }).lean();
+    if (category && category.features?.length > 0) {
+      payload.feature_flags = category.features;
+    } else {
+      // Agar category DB mein nahi mili toh empty array rakho
+      payload.feature_flags = [];
+    }
   }
 
   const tenant = await SuperTenant.create(payload);
