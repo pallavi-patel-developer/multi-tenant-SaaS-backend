@@ -27,6 +27,7 @@
 import SuperTenant from '../modules/superTenant/superTenant.models.js';
 import SuperCategory from '../modules/superCategories/superCategories.models.js';
 import { nanoid } from "nanoid";
+import bcrypt from 'bcrypt';
 
 const createTenant = async (payload) => {
   const { subdomain, subscription } = payload;
@@ -57,29 +58,28 @@ const createTenant = async (payload) => {
   }
 
   payload.tenantId = ("TENANTID-" + nanoid(12));
+  const plainPassword = `${nanoid(4)}-${nanoid(4)}-${nanoid(4)}`;
+  const hashedPassword = await bcrypt.hash(plainPassword, 12);
+  payload.owner.password = hashedPassword;
 
   if (!subscription?.expiryDate) {
     const expiry = new Date();
     expiry.setMonth(expiry.getMonth() + 1);
     payload.subscription.expiryDate = expiry;
   }
-
-  // Business type ke basis pe SuperCategory se feature_flags copy karo
-  // e.g. business.type = 'hotel' → hotel ki features automatically milegi
   const businessType = payload.business?.type?.toLowerCase();
   if (businessType) {
     const category = await SuperCategory.findOne({ type: businessType }).lean();
     if (category && category.features?.length > 0) {
       payload.feature_flags = category.features;
     } else {
-      // Agar category DB mein nahi mili toh empty array rakho
       payload.feature_flags = [];
     }
   }
 
   const tenant = await SuperTenant.create(payload);
 
-  return tenant;
+  return { tenant, plainPassword };
 };
 
 const getTenants = async () => {

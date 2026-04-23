@@ -9,9 +9,16 @@ import { logAuditAction } from '../../utils/logger.js';
 import SuperTenantService from '../../services/superTenant.service.js';
 export const createTenant = async (req, res, next) => {
   try {
-    const newTenant = await SuperTenantService.createTenant(req.body);
-    await logAuditAction(req, 'TENANT_CREATED', newTenant._id, `Tenant created: ${newTenant.tenantName}`);
-    res.status(201).json({ success: true, data: newTenant });
+    const { tenant, plainPassword } = await SuperTenantService.createTenant(req.body);
+    await logAuditAction(req, 'TENANT_CREATED', tenant._id, `Tenant created: ${tenant.business?.name}`);
+    res.status(201).json({
+      success: true,
+      data: tenant,
+      credentials: {
+        tenantId: tenant.tenantId,
+        password: plainPassword,
+      }
+    });
   } catch (error) {
     next(error);
   }

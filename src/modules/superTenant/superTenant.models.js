@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import validate from 'validator';
 import { Schema } from 'mongoose';
-// feature_flags are copied from SuperCategory at tenant creation time
+import nanoid from 'nanoid'
 const SuperTenantSchema = new Schema({
   tenantId:
   {
@@ -11,6 +11,12 @@ const SuperTenantSchema = new Schema({
     immutable: true,
     trim: true,
     index: true
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    default: nanoid(6)
   },
   business:
   {
