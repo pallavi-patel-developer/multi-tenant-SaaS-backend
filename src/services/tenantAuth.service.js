@@ -1,4 +1,4 @@
-import SuperTenant from '../superTenant/superTenant.models.js';
+import SuperTenant from '../modules/superTenant/superTenant.models.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
