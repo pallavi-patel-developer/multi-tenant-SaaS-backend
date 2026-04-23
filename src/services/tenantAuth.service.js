@@ -9,6 +9,10 @@ const loginTenant = async (tenantId, password) => {
 
     if (!tenant) throw new Error('Invalid Tenant ID or password');
 
+    if (!tenant.owner || !tenant.owner.password) {
+        throw new Error('No password is set for this account. Please contact your administrator.');
+    }
+
     const isMatch = await bcrypt.compare(password, tenant.owner.password);
     if (!isMatch) throw new Error('Invalid Tenant ID or password');
 

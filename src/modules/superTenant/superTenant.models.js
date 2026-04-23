@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import validate from 'validator';
 import { Schema } from 'mongoose';
-import nanoid from 'nanoid'
 const SuperTenantSchema = new Schema({
   tenantId:
   {
@@ -12,12 +11,7 @@ const SuperTenantSchema = new Schema({
     trim: true,
     index: true
   },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    default: nanoid(6)
-  },
+
   business:
   {
     name: {
@@ -61,6 +55,11 @@ const SuperTenantSchema = new Schema({
       required: true,
       trim: true,
       validate: v => validate.isMobilePhone(v, "en-IN")
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false
     }
   },
   address: {

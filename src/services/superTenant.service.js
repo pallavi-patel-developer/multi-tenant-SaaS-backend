@@ -67,11 +67,15 @@ const createTenant = async (payload) => {
     expiry.setMonth(expiry.getMonth() + 1);
     payload.subscription.expiryDate = expiry;
   }
-  const businessType = payload.business?.type?.toLowerCase();
-  if (businessType) {
-    const category = await SuperCategory.findOne({ type: businessType }).lean();
-    if (category && category.features?.length > 0) {
-      payload.feature_flags = category.features;
+  if (!payload.feature_flags) {
+    const businessType = payload.business?.type?.toLowerCase();
+    if (businessType) {
+      const category = await SuperCategory.findOne({ type: businessType }).lean();
+      if (category && category.features?.length > 0) {
+        payload.feature_flags = category.features;
+      } else {
+        payload.feature_flags = [];
+      }
     } else {
       payload.feature_flags = [];
     }
@@ -97,8 +101,21 @@ const getTenantById = async (id) => {
   return tenant;
 }
 
+const flattenObject = (obj, prefix = '') => {
+  return Object.keys(obj).reduce((acc, k) => {
+    const pre = prefix.length ? prefix + '.' : '';
+    if (typeof obj[k] === 'object' && obj[k] !== null && !Array.isArray(obj[k]) && !(obj[k] instanceof Date)) {
+      Object.assign(acc, flattenObject(obj[k], pre + k));
+    } else {
+      acc[pre + k] = obj[k];
+    }
+    return acc;
+  }, {});
+};
+
 const updateTenant = async (id, payload) => {
-  return await SuperTenant.findByIdAndUpdate(id, payload, { returnDocument: 'after' });
+  const flatPayload = { $set: flattenObject(payload) };
+  return await SuperTenant.findByIdAndUpdate(id, flatPayload, { returnDocument: 'after' });
 }
 
 const deleteTenant = async (id) => {
