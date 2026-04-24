@@ -4,11 +4,18 @@ import express from 'express';
 import mongoose from 'mongoose';
 import helmet from 'helmet';
 import cors from 'cors';
+import statusMonitor from 'express-status-monitor';
 
 const app = express();
 const port = process.env.PORT;
 import connectDB from './src/config/db.js';
 connectDB();
+
+app.use(statusMonitor({
+  title: "Multi-Tenant SaaS Dashboard",
+  theme: "default.css",
+  port: process.env.STATUS_MONITOR_PORT || 5001
+}));
 
 app.use(helmet());
 app.use(cors());
@@ -36,7 +43,7 @@ app.use('/api/v1/tenant/auth', tenantAuthRoutes);
 
 import errorHandler from './src/middlewares/error.middleware.js';
 app.use(errorHandler);
-app.get('/', (req, res) => {
+app.get('/', (res) => {
   res.send("Multi-Tenant SaaS API is running...");
 });
 
