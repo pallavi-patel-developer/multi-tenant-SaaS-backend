@@ -20,5 +20,8 @@
     "start": "node server.js",
     "lint": "eslint",
     "seed:admin": "node src/scripts/seedSuperAdmin.js"
+  },
+  "overrides": {
+    "pidusage": "^4.0.1"
   }
 }
