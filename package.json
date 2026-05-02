@@ -15,10 +15,8 @@
     "zod": "^4.3.6"
   },
   "scripts": {
-    "dev": "node server.js",
-    "build": "next build",
+    "dev": "node --watch server.js",
     "start": "node server.js",
-    "lint": "eslint",
     "seed:admin": "node src/scripts/seedSuperAdmin.js"
   },
   "overrides": {

@@ -43,7 +43,17 @@ app.use('/api/v1/tenant/auth', tenantAuthRoutes);
 
 import errorHandler from './src/middlewares/error.middleware.js';
 app.use(errorHandler);
-app.get('/', (res) => {
+
+// Health check — used by Docker & Nginx
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    service: 'multi-tenant-saas-backend'
+  });
+});
+
+app.get('/', (req, res) => {
   res.send("Multi-Tenant SaaS API is running...");
 });
 
