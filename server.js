@@ -21,7 +21,6 @@ app.use(helmet());
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  // TODO: Replace with your actual Vercel URLs after deployment
   'https://multi-tenant-saa-s-super-panel.vercel.app',
   'https://multi-tenant-saa-s-tenant-panel.vercel.app',
 ];
