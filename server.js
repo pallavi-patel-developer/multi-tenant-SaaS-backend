@@ -18,7 +18,26 @@ app.use(statusMonitor({
 }));
 
 app.use(helmet());
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  // TODO: Replace with your actual Vercel URLs after deployment
+  'https://multi-tenant-saa-s-super-panel.vercel.app',
+  'https://multi-tenant-saa-s-tenant-panel.vercel.app',
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked: ${origin}`));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
