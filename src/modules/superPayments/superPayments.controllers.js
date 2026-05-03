@@ -21,8 +21,9 @@ const createSuperPayment = async (req, res) => {
     if (!tenant) {
       return res.status(404).json({ success: false, message: "This Email is not registered" });
     }
-    const createdBy = req.user.id;   // logged-in user ki _id
-    const createdByModel = roleToModelName(req.user.role); // "superAdmin" → "SuperAdmin"
+    const createdBy = req.user._id || req.user.id;   // logged-in user ki _id
+    const userRole = req.user.role || req.user.roleName;
+    const createdByModel = roleToModelName(userRole); // "superAdmin" → "SuperAdmin", or custom role
 
     if (!createdByModel) {
       return res.status(403).json({ success: false, message: "Role not found in token" });

@@ -1,13 +1,10 @@
 import { Router } from 'express';
 import { createSuperPayment, getSuperPayment } from './superPayments.controllers.js';
-import { authenticate, authorizeSuperAdmin } from '../../middlewares/auth.superAdmin.middleware.js';
+import { authorizePermission } from '../../middlewares/auth.permissions.middleware.js';
 
 const router = Router();
 
-// Saare routes protected hain — req.user middleware se set hoga
-router.use(authenticate, authorizeSuperAdmin);
-
-router.post('/', createSuperPayment);
-router.get('/', getSuperPayment);
+router.post('/', authorizePermission('Payments', 'Configure'), createSuperPayment);
+router.get('/', authorizePermission('Payments', 'View'), getSuperPayment);
 
 export default router;

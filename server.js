@@ -21,13 +21,18 @@ app.use(helmet());
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
+  // Super Panel — update with exact URL after first deploy
   'https://multi-tenant-saa-s-super-panel.vercel.app',
+  // Tenant Panel — update with exact URL after first deploy
   'https://multi-tenant-saa-s-tenant-panel.vercel.app',
 ];
 
+// Also allow all Vercel preview URLs (branch deploys, PR previews)
+const vercelPreviewRegex = /^https:\/\/.*\.vercel\.app$/;
+
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
       callback(null, true);
     } else {
       callback(new Error(`CORS blocked: ${origin}`));
