@@ -50,6 +50,7 @@ import superPaymentsRoutes from './src/modules/superPayments/superPayments.route
 import superRoleRoutes from './src/modules/superRole/superRole.routes.js';
 import superCategoriesRoutes from './src/modules/superCategories/superCategories.routes.js';
 import tenantAuthRoutes from './src/modules/tenantAuth/tenantAuth.routes.js';
+import tenantSettingsRoutes from './src/modules/tenantPanel/settings/settings.routes.js';
 
 app.use('/api/v1/tenants', superTenantRoutes);
 app.use('/api/v1/plans', superPlansRoutes);
@@ -59,6 +60,7 @@ app.use('/api/v1/payments', superPaymentsRoutes);
 app.use('/api/v1/roles', superRoleRoutes);
 app.use('/api/v1/categories', superCategoriesRoutes);
 app.use('/api/v1/tenant/auth', tenantAuthRoutes);
+app.use('/api/v1/tenant/settings', tenantSettingsRoutes);
 
 import errorHandler from './src/middlewares/error.middleware.js';
 app.use(errorHandler);
