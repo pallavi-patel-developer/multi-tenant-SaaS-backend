@@ -1,5 +1,22 @@
 import TenantSettings from "./settings.models.js";
 
+const getSettings = async (req, res) => {
+    try {
+        const tenantId = req.user?.tenantId;
+        if (!tenantId) {
+            return res.status(401).json({ success: false, message: "Unauthorized: Tenant ID missing" });
+        }
+        let settings = await TenantSettings.findOne({ tenantId });
+        if (!settings) {
+            // Create default settings if they don't exist
+            settings = await TenantSettings.create({ tenantId, generalSettings: {}, localization: {} });
+        }
+        return res.status(200).json({ success: true, data: settings });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 const updateGeneralSettings = async (req, res) => {
     try {
         const { businessName, businessEmail, supportPhone, gst, businessAddress } = req.body;
@@ -81,4 +98,4 @@ const updateLocalizationSettings = async (req, res) => {
     }
 };
 
-export { updateGeneralSettings, updateLocalizationSettings };
+export { getSettings, updateGeneralSettings, updateLocalizationSettings };
