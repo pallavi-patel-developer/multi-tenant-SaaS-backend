@@ -41,7 +41,6 @@ const createSuperPayment = async (req, res) => {
     return res.status(201).json({ success: true, message: "Payment Created Successfully", data: paymentConfig });
   }
   catch (e) {
-    console.log("Error in creating super payment", e);
     return res.status(500).json({ success: false, message: "Internal Server Error", error: e.message });
   }
 };

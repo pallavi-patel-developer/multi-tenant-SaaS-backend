@@ -18,7 +18,6 @@ const tenantAuthMiddleware = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    console.log("ERROR : ", error);
     return res.status(401).json({ success: false, message: "Unauthorized: Invalid or expired token", error: error.message });
   }
 };

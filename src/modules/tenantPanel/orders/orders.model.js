@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Tenant", required: true },
+    tenantId: { type: String, required: true },
     customerName: { type: String, required: true },
     customerEmail: { type: String },
     items: [

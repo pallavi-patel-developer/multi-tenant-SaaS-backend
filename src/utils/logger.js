@@ -19,7 +19,6 @@ export const logAuditAction = async (req, actionTitle, resourceId, details) => {
           user = await SuperRoleModel.default.findById(decoded.id).lean();
         }
       } catch (err) {
-        console.log("Logger Token Parse Error ignored");
       }
     }
 
