@@ -58,6 +58,7 @@ import tenantStaffRoutes from './src/modules/tenantPanel/staff/staff.routes.js';
 import tenantProductsRoutes from './src/modules/tenantPanel/products/products.routes.js';
 import tenantReportsRoutes from './src/modules/tenantPanel/reports/reports.routes.js';
 import tenantAuditLogsRoutes from './src/modules/tenantPanel/auditLogs/auditLogs.routes.js';
+import tenantDashboardRoutes from './src/modules/tenantPanel/dashboard/dashboard.routes.js';
 
 app.use('/api/v1/tenants', superTenantRoutes);
 app.use('/api/v1/plans', superPlansRoutes);
@@ -74,6 +75,7 @@ app.use('/api/v1/tenant/staff', tenantStaffRoutes);
 app.use('/api/v1/tenant/products', tenantProductsRoutes);
 app.use('/api/v1/tenant/reports', tenantReportsRoutes);
 app.use('/api/v1/tenant/audit-logs', tenantAuditLogsRoutes);
+app.use('/api/v1/tenant/dashboard', tenantDashboardRoutes);
 
 import errorHandler from './src/middlewares/error.middleware.js';
 app.use(errorHandler);
